@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Volleyball Score Board</string>
+    <string name="default_name_team_a">TEAM A</string>
+    <string name="default_score_team_a">0</string>
+    <string name="default_set_team_a">0</string>
+    <string name="default_name_team_b">TEAM B</string>
+    <string name="default_score_team_b">0</string>
+    <string name="default_set_team_b">0</string>
 </resources>
