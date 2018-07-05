@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private Team teamA;
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         this.teamB.setScores(limitSets);
         this.lastTeam = "";
 
-        setBoard();
+        configBoard();
 
         final TextView scoreA = findViewById(R.id.score_team_a);
         scoreA.setOnTouchListener(mScoreListener);
@@ -116,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         setB.setOnTouchListener(mSetListener);
     }
 
-    private void setBoard() {
+    private void configBoard() {
         final TextView scoreA = findViewById(R.id.score_team_a);
         scoreA.setText(this.teamA.getScoreText());
         final TextView setA = findViewById(R.id.set_team_a);
@@ -136,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             team.setScore(team.getScore() + 1);
             this.lastTeam = current_team;
         }
-        setBoard();
+        configBoard();
     }
 
     private void subtractPoint(String current_team) {
@@ -145,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             team.setScore(team.getScore() - 1);
             this.lastTeam = "";
         }
-        setBoard();
+        configBoard();
     }
 
     private void addSet(String current_team) {
@@ -163,19 +160,51 @@ public class MainActivity extends AppCompatActivity {
                 this.teamB.setScore(0);
             }
             this.lastTeam = current_team;
+            configScores();
         }
-        setBoard();
+        configBoard();
     }
 
     private void subtractSet(String current_team) {
         Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
+        int sets;
         if (team.getSet() > 0 && current_team.equals(this.lastTeam)) {
+            sets = this.teamA.getSet() + this.teamB.getSet();
+            this.teamA.setScore(this.teamA.getScoresIndex(sets - 1));
+            this.teamB.setScore(this.teamB.getScoresIndex(sets - 1));
+            this.teamA.setScoresIndex(sets - 1, 0);
+            this.teamB.setScoresIndex(sets - 1, 0);
             team.setSet(team.getSet() - 1);
-            int sets = this.teamA.getSet() + this.teamB.getSet();
-            this.teamA.setScore(this.teamA.getScoresIndex(sets));
-            this.teamB.setScore(this.teamB.getScoresIndex(sets));
             this.lastTeam = current_team;
+            configScores();
         }
-        setBoard();
+        configBoard();
+    }
+
+    public void configScores() {
+        int id_a, id_b;
+        String text_a, text_b;
+        for (int set = 0; set < this.limitSets; set++) {
+            switch (set) {
+                case 1:
+                    id_a = R.id.set2_team_a;
+                    id_b = R.id.set2_team_b;
+                    break;
+                case 2:
+                    id_a = R.id.set3_team_a;
+                    id_b = R.id.set3_team_b;
+                    break;
+                default:
+                    id_a = R.id.set1_team_a;
+                    id_b = R.id.set1_team_b;
+                    break;
+            }
+            text_a = (this.teamA.getScoresIndex(set) == 0) ? getString(R.string.empty_score) : "" + this.teamA.getScoresIndex(set);
+            text_b = (this.teamB.getScoresIndex(set) == 0) ? getString(R.string.empty_score) : "" + this.teamB.getScoresIndex(set);
+            final TextView scoreA = findViewById(id_a);
+            scoreA.setText(text_a);
+            final TextView scoreB = findViewById(id_b);
+            scoreB.setText(text_b);
+        }
     }
 }
