@@ -14,7 +14,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/default_name_team_a"
-        android:textSize="18sp"
+        android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,19 +26,19 @@
         android:layout_marginRight="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/default_name_team_b"
-        android:textSize="18sp"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/score_team_a"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:text="@string/default_score_team_a"
-        android:textSize="36sp"
+        android:text="@string/default_score"
+        android:textSize="152sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_team_a" />
@@ -46,12 +46,12 @@
     <TextView
         android:id="@+id/score_team_b"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="16dp"
-        android:text="@string/default_score_team_b"
-        android:textSize="36sp"
+        android:text="@string/default_score"
+        android:textSize="152sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_team_b" />
@@ -60,23 +60,23 @@
         android:id="@+id/set_team_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/default_set_team_a"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/score_team_a"
-        app:layout_constraintTop_toBottomOf="@+id/name_team_a" />
+        android:layout_marginLeft="220dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/default_set"
+        android:textSize="92sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/score_team_a" />
 
     <TextView
         android:id="@+id/set_team_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/default_set_team_b"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/score_team_b"
-        app:layout_constraintTop_toBottomOf="@+id/name_team_b" />
+        android:layout_marginEnd="220dp"
+        android:layout_marginRight="220dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/default_set"
+        android:textSize="92sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/score_team_b" />
 </android.support.constraint.ConstraintLayout>
