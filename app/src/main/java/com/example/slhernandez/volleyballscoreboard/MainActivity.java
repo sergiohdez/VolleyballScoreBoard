@@ -1,10 +1,14 @@
 package com.example.slhernandez.volleyballscoreboard;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -91,14 +95,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.limitSets = 3;
-        this.teamA = new Team(getString(R.string.default_name_team_a), 0, 0);
-        this.teamB = new Team(getString(R.string.default_name_team_b), 0, 0);
-        this.teamA.setScores(limitSets);
-        this.teamB.setScores(limitSets);
-        this.lastTeam = "";
-
-        configBoard();
+        configInitial();
 
         final TextView scoreA = findViewById(R.id.score_team_a);
         scoreA.setOnTouchListener(mScoreListener);
@@ -111,6 +108,43 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView setB = findViewById(R.id.set_team_b);
         setB.setOnTouchListener(mSetListener);
+
+        final Button btnReset = findViewById(R.id.btn_reset);
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.reset)
+                        .setMessage(R.string.really_reset)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                configInitial();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null);
+                final AlertDialog dialog = builder.create();
+                try {
+                    dialog.show();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("Exception", e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void configInitial() {
+        this.limitSets = 3;
+        this.teamA = new Team(getString(R.string.default_name_team_a), 0, 0);
+        this.teamB = new Team(getString(R.string.default_name_team_b), 0, 0);
+        this.teamA.setScores(limitSets);
+        this.teamB.setScores(limitSets);
+        this.lastTeam = "";
+        configBoard();
+        configScores();
     }
 
     private void configBoard() {
