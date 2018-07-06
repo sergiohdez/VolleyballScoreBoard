@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private Team teamB;
     private int limitSets;
     private String lastTeam;
+    private int current_set;
 
     private View.OnTouchListener mScoreListener = new View.OnTouchListener() {
         private float y1;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         this.teamA.setScores(limitSets);
         this.teamB.setScores(limitSets);
         this.lastTeam = "";
+        this.current_set = 0;
         configBoard();
         configScores();
     }
@@ -158,64 +160,7 @@ public class MainActivity extends AppCompatActivity {
         setB.setText(this.teamB.getSetText());
     }
 
-    private void addPoint(String current_team) {
-        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
-        int diffScores = Math.abs(this.teamA.getScore() - this.teamB.getScore());
-        int sets = this.teamA.getSet() + this.teamB.getSet();
-        int limitPoints = (sets < this.limitSets - 1) ? 25 : 15;
-        if ((this.teamA.getScore() < limitPoints && this.teamB.getScore() < limitPoints) || diffScores < 2) {
-            team.setScore(team.getScore() + 1);
-            this.lastTeam = current_team;
-        }
-        configBoard();
-    }
-
-    private void subtractPoint(String current_team) {
-        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
-        if (team.getScore() > 0 && current_team.equals(this.lastTeam)) {
-            team.setScore(team.getScore() - 1);
-            this.lastTeam = "";
-        }
-        configBoard();
-    }
-
-    private void addSet(String current_team) {
-        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
-        int diffScores = Math.abs(this.teamA.getScore() - this.teamB.getScore());
-        int sets = this.teamA.getSet() + this.teamB.getSet();
-        int limitPoints = (sets < this.limitSets - 1) ? 25 : 15;
-        if (sets < this.limitSets && team.getScore() >= limitPoints && diffScores >= 2) {
-            this.teamA.setScoresIndex(sets, this.teamA.getScore());
-            this.teamB.setScoresIndex(sets, this.teamB.getScore());
-            team.setSet(team.getSet() + 1);
-            sets = this.teamA.getSet() + this.teamB.getSet();
-            if (sets < this.limitSets) {
-                this.teamA.setScore(0);
-                this.teamB.setScore(0);
-            }
-            this.lastTeam = current_team;
-            configScores();
-        }
-        configBoard();
-    }
-
-    private void subtractSet(String current_team) {
-        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
-        int sets;
-        if (team.getSet() > 0 && current_team.equals(this.lastTeam)) {
-            sets = this.teamA.getSet() + this.teamB.getSet();
-            this.teamA.setScore(this.teamA.getScoresIndex(sets - 1));
-            this.teamB.setScore(this.teamB.getScoresIndex(sets - 1));
-            this.teamA.setScoresIndex(sets - 1, 0);
-            this.teamB.setScoresIndex(sets - 1, 0);
-            team.setSet(team.getSet() - 1);
-            this.lastTeam = current_team;
-            configScores();
-        }
-        configBoard();
-    }
-
-    public void configScores() {
+    private void configScores() {
         int id_a, id_b;
         String text_a, text_b;
         for (int set = 0; set < this.limitSets; set++) {
@@ -239,6 +184,70 @@ public class MainActivity extends AppCompatActivity {
             scoreA.setText(text_a);
             final TextView scoreB = findViewById(id_b);
             scoreB.setText(text_b);
+        }
+    }
+
+    private boolean isSetEnd() {
+        int diffScores = Math.abs(this.teamA.getScore() - this.teamB.getScore());
+        int sets = this.teamA.getSet() + this.teamB.getSet();
+        int limitPoints = (sets < this.limitSets - 1) ? 25 : 15;
+        return (this.teamA.getScore() >= limitPoints || this.teamB.getScore() >= limitPoints) && diffScores >= 2;
+    }
+
+    private boolean isGameEnd() {
+        float rel_a, rel_b;
+        rel_a = (float) this.teamA.getSet() / this.limitSets;
+        rel_b = (float) this.teamB.getSet() / this.limitSets;
+        return rel_a > 0.5 || rel_b > 0.5;
+    }
+
+    private void addPoint(String current_team) {
+        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
+        if (!isGameEnd() && !isSetEnd()) {
+            team.setScore(team.getScore() + 1);
+            this.lastTeam = current_team;
+            configBoard();
+        }
+    }
+
+    private void subtractPoint(String current_team) {
+        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
+        if (team.getScore() > 0 && current_team.equals(this.lastTeam)) {
+            team.setScore(team.getScore() - 1);
+            this.lastTeam = "";
+            configBoard();
+        }
+    }
+
+    private void addSet(String current_team) {
+        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
+        if (!isGameEnd() && isSetEnd() && current_team.equals(this.lastTeam)) {
+            this.teamA.setScoresIndex(this.current_set, this.teamA.getScore());
+            this.teamB.setScoresIndex(this.current_set, this.teamB.getScore());
+            team.setSet(team.getSet() + 1);
+            if (!isGameEnd()) {
+                this.teamA.setScore(0);
+                this.teamB.setScore(0);
+            }
+            this.lastTeam = current_team;
+            this.current_set += 1;
+            configBoard();
+            configScores();
+        }
+    }
+
+    private void subtractSet(String current_team) {
+        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
+        if (team.getSet() > 0 && current_team.equals(this.lastTeam)) {
+            this.current_set -= 1;
+            this.teamA.setScore(this.teamA.getScoresIndex(this.current_set));
+            this.teamB.setScore(this.teamB.getScoresIndex(this.current_set));
+            this.teamA.setScoresIndex(this.current_set, 0);
+            this.teamB.setScoresIndex(this.current_set, 0);
+            team.setSet(team.getSet() - 1);
+            this.lastTeam = current_team;
+            configBoard();
+            configScores();
         }
     }
 }
