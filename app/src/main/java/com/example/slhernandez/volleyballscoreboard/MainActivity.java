@@ -11,6 +11,8 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private Team teamB;
     private int limitSets;
     private String lastTeam;
-    private int current_set;
+    private int currentSet;
+    private boolean isPlaying;
 
     private final View.OnTouchListener mScoreListener = new View.OnTouchListener() {
         private float y1;
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         configInitial();
+        this.limitSets = 3;
 
         final TextView scoreA = findViewById(R.id.score_team_a);
         scoreA.setOnTouchListener(mScoreListener);
@@ -119,19 +123,53 @@ public class MainActivity extends AppCompatActivity {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.reset)
-                        .setMessage(R.string.really_reset)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                configInitial();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null);
-                final AlertDialog dialog = builder.create();
                 try {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(R.string.reset_title)
+                            .setMessage(R.string.really_reset)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    configInitial();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null);
+                    final AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface xdialog) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+                        }
+                    });
+                    dialog.show();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("Exception in Dialog:", e.getMessage());
+                }
+            }
+        });
+
+        final RadioGroup radios = findViewById(R.id.radioGroup);
+        radios.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, final int checkedId) {
+                try {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(group.getContext());
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(R.string.change_sets)
+                            .setMessage(R.string.really_change_set)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final RadioButton radio = findViewById(checkedId);
+                                    changeSets(Integer.parseInt(radio.getTag().toString()));
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null);
+                    final AlertDialog dialog = builder.create();
                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
                         public void onShow(DialogInterface xdialog) {
@@ -149,14 +187,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void changeSets(int sets) {
+        Toast.makeText(this, "Sets: " + sets, Toast.LENGTH_SHORT).show();
+    }
+
     private void configInitial() {
-        this.limitSets = 3;
         this.teamA = new Team(getString(R.string.default_name_team_a), 0, 0);
         this.teamB = new Team(getString(R.string.default_name_team_b), 0, 0);
         this.teamA.setScores(limitSets);
         this.teamB.setScores(limitSets);
         this.lastTeam = "";
-        this.current_set = 0;
+        this.currentSet = 0;
+        this.isPlaying = false;
         configBoard();
         configScores();
     }
@@ -190,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                     id_b = R.id.set1_team_b;
                     break;
             }
-            if (this.current_set < set + 1) {
+            if (this.currentSet < set + 1) {
                 text_a = getString(R.string.empty_score);
                 text_b = getString(R.string.empty_score);
             }
@@ -225,6 +267,9 @@ public class MainActivity extends AppCompatActivity {
             team.setScore(team.getScore() + 1);
             this.lastTeam = current_team;
             configBoard();
+            if (!this.isPlaying) {
+                this.isPlaying = true;
+            }
         }
     }
 
@@ -240,8 +285,8 @@ public class MainActivity extends AppCompatActivity {
     private void addSet(String current_team) {
         Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
         if (!isGameEnd() && isSetEnd() && current_team.equals(this.lastTeam)) {
-            this.teamA.setScoresIndex(this.current_set, this.teamA.getScore());
-            this.teamB.setScoresIndex(this.current_set, this.teamB.getScore());
+            this.teamA.setScoresIndex(this.currentSet, this.teamA.getScore());
+            this.teamB.setScoresIndex(this.currentSet, this.teamB.getScore());
             team.setSet(team.getSet() + 1);
             if (isGameEnd()) {
                 String winner = String.format("%s %s", getString(R.string.winner_message), team.getName());
@@ -254,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 this.teamB.setScore(0);
             }
             this.lastTeam = current_team;
-            this.current_set += 1;
+            this.currentSet += 1;
             configBoard();
             configScores();
         }
@@ -263,11 +308,11 @@ public class MainActivity extends AppCompatActivity {
     private void subtractSet(String current_team) {
         Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
         if (team.getSet() > 0 && current_team.equals(this.lastTeam)) {
-            this.current_set -= 1;
-            this.teamA.setScore(this.teamA.getScoresIndex(this.current_set));
-            this.teamB.setScore(this.teamB.getScoresIndex(this.current_set));
-            this.teamA.setScoresIndex(this.current_set, 0);
-            this.teamB.setScoresIndex(this.current_set, 0);
+            this.currentSet -= 1;
+            this.teamA.setScore(this.teamA.getScoresIndex(this.currentSet));
+            this.teamB.setScore(this.teamB.getScoresIndex(this.currentSet));
+            this.teamA.setScoresIndex(this.currentSet, 0);
+            this.teamB.setScoresIndex(this.currentSet, 0);
             team.setSet(team.getSet() - 1);
             this.lastTeam = current_team;
             configBoard();

@@ -5,7 +5,13 @@
     <string name="default_score">99</string>
     <string name="default_set">9</string>
     <string name="empty_score">--</string>
-    <string name="reset">Reset</string>
-    <string name="really_reset">Are you sure that you want to reset?</string>
+    <string name="reset_title">Reset Game</string>
+    <string name="reset_label">Reset</string>
+    <string name="really_reset">¿Are you sure that you want to reset the game?</string>
     <string name="winner_message">The winner team is</string>
+    <string name="sets_label">Sets</string>
+    <string name="label_3">3</string>
+    <string name="label_5">5</string>
+    <string name="change_sets">Change Sets</string>
+    <string name="really_change_set">¿Are you sure that you want to change the number of sets?</string>
 </resources>
