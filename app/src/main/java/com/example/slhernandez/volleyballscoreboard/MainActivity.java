@@ -2,14 +2,19 @@ package com.example.slhernandez.volleyballscoreboard;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private Team teamA;
@@ -18,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private String lastTeam;
     private int current_set;
 
-    private View.OnTouchListener mScoreListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mScoreListener = new View.OnTouchListener() {
         private float y1;
         private float y2;
         @SuppressLint("ClickableViewAccessibility")
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private View.OnTouchListener mSetListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mSetListener = new View.OnTouchListener() {
         private float y1;
         private float y2;
         @SuppressLint("ClickableViewAccessibility")
@@ -127,11 +132,18 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton(android.R.string.no, null);
                 final AlertDialog dialog = builder.create();
                 try {
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface xdialog) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+                        }
+                    });
                     dialog.show();
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("Exception", e.getMessage());
+                    Log.e("Exception in Dialog:", e.getMessage());
                 }
             }
         });
@@ -178,8 +190,14 @@ public class MainActivity extends AppCompatActivity {
                     id_b = R.id.set1_team_b;
                     break;
             }
-            text_a = (this.teamA.getScoresIndex(set) == 0) ? getString(R.string.empty_score) : "" + this.teamA.getScoresIndex(set);
-            text_b = (this.teamB.getScoresIndex(set) == 0) ? getString(R.string.empty_score) : "" + this.teamB.getScoresIndex(set);
+            if (this.current_set < set + 1) {
+                text_a = getString(R.string.empty_score);
+                text_b = getString(R.string.empty_score);
+            }
+            else {
+                text_a = String.format(Locale.ROOT, "%02d", this.teamA.getScoresIndex(set));
+                text_b = String.format(Locale.ROOT, "%02d", this.teamB.getScoresIndex(set));
+            }
             final TextView scoreA = findViewById(id_a);
             scoreA.setText(text_a);
             final TextView scoreB = findViewById(id_b);
@@ -225,7 +243,13 @@ public class MainActivity extends AppCompatActivity {
             this.teamA.setScoresIndex(this.current_set, this.teamA.getScore());
             this.teamB.setScoresIndex(this.current_set, this.teamB.getScore());
             team.setSet(team.getSet() + 1);
-            if (!isGameEnd()) {
+            if (isGameEnd()) {
+                String winner = String.format("%s %s", getString(R.string.winner_message), team.getName());
+                Toast toast = Toast.makeText(getApplicationContext(), winner, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
+            }
+            else {
                 this.teamA.setScore(0);
                 this.teamB.setScore(0);
             }
