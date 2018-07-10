@@ -98,14 +98,55 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener mRadioButtonListener = new View.OnClickListener() {
+        private int newLimitSets;
+        @Override
+        public void onClick(final View v) {
+            newLimitSets = Integer.parseInt(v.getTag().toString());
+            try {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.change_sets)
+                        .setMessage(R.string.really_change_set)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                changeSets(newLimitSets);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                cancelChangeSets(newLimitSets);
+                            }
+                        });
+                final AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface xdialog) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+                    }
+                });
+                if (this.newLimitSets != limitSets) {
+                    dialog.show();
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Exception in Dialog:", e.getMessage());
+            }
+        }
+    };
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        configInitial();
         this.limitSets = 3;
+        configInitial(this.limitSets);
 
         final TextView scoreA = findViewById(R.id.score_team_a);
         scoreA.setOnTouchListener(mScoreListener);
@@ -131,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    configInitial();
+                                    configInitial(limitSets);
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null);
@@ -152,55 +193,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final RadioGroup radios = findViewById(R.id.radioGroup);
-        radios.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, final int checkedId) {
-                try {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(group.getContext());
-                    builder.setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle(R.string.change_sets)
-                            .setMessage(R.string.really_change_set)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    final RadioButton radio = findViewById(checkedId);
-                                    changeSets(Integer.parseInt(radio.getTag().toString()));
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null);
-                    final AlertDialog dialog = builder.create();
-                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface xdialog) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
-                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
-                        }
-                    });
-                    dialog.show();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("Exception in Dialog:", e.getMessage());
-                }
-            }
-        });
+        final RadioButton radio3 = findViewById(R.id.radio_btn_3);
+        radio3.setOnClickListener(mRadioButtonListener);
+
+        final RadioButton radio5 = findViewById(R.id.radio_btn_5);
+        radio5.setOnClickListener(mRadioButtonListener);
     }
 
     private void changeSets(int sets) {
+        this.limitSets = sets;
+        configInitial(sets);
         Toast.makeText(this, "Sets: " + sets, Toast.LENGTH_SHORT).show();
     }
 
-    private void configInitial() {
+    private void cancelChangeSets(int sets) {
+        final RadioButton radioPrev, radio;
+        final int radioIDPrev, radioID;
+        radioIDPrev = (sets == 3) ? R.id.radio_btn_5 : R.id.radio_btn_3;
+        radioID = (sets == 3) ? R.id.radio_btn_3 : R.id.radio_btn_5;
+        radioPrev = findViewById(radioIDPrev);
+        radioPrev.setChecked(true);
+        radio = findViewById(radioID);
+        radio.setChecked(false);
+    }
+
+    private void configInitial(int sets) {
         this.teamA = new Team(getString(R.string.default_name_team_a), 0, 0);
         this.teamB = new Team(getString(R.string.default_name_team_b), 0, 0);
-        this.teamA.setScores(limitSets);
-        this.teamB.setScores(limitSets);
+        this.teamA.setScores(sets);
+        this.teamB.setScores(sets);
         this.lastTeam = "";
         this.currentSet = 0;
         this.isPlaying = false;
         configBoard();
-        configScores();
+        configScores(sets);
     }
 
     private void configBoard() {
@@ -214,10 +240,10 @@ public class MainActivity extends AppCompatActivity {
         setB.setText(this.teamB.getSetText());
     }
 
-    private void configScores() {
+    private void configScores(int sets) {
         int id_a, id_b;
         String text_a, text_b;
-        for (int set = 0; set < this.limitSets; set++) {
+        for (int set = 0; set < sets; set++) {
             switch (set) {
                 case 1:
                     id_a = R.id.set2_team_a;
@@ -301,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
             this.lastTeam = current_team;
             this.currentSet += 1;
             configBoard();
-            configScores();
+            configScores(this.limitSets);
         }
     }
 
@@ -316,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
             team.setSet(team.getSet() - 1);
             this.lastTeam = current_team;
             configBoard();
-            configScores();
+            configScores(this.limitSets);
         }
     }
 }
