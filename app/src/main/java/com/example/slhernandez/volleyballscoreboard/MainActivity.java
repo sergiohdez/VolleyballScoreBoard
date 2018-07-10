@@ -6,11 +6,13 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private final View.OnClickListener mRadioButtonListener = new View.OnClickListener() {
         private int newLimitSets;
         @Override
-        public void onClick(final View v) {
+        public void onClick(View v) {
             newLimitSets = Integer.parseInt(v.getTag().toString());
             try {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
@@ -133,6 +135,78 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (!isPlaying) {
                     changeSets(newLimitSets);
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Exception in Dialog:", e.getMessage());
+            }
+        }
+    };
+
+    private final View.OnClickListener mTeamNameListener = new View.OnClickListener() {
+        private String team;
+        @Override
+        public void onClick(View v) {
+            team = v.getTag().toString();
+            try {
+                final EditText newName = new EditText(v.getContext());
+                final TextView name = findViewById(v.getId());
+                newName.setId(getResources().getIdentifier("new_team_name", "id", getPackageName()));
+                newName.setText(name.getText());
+                newName.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(10) });
+                newName.setSelection(newName.getText().length());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle(R.string.change_team_name)
+                        //.setMessage(R.string.really_change_set)
+                        .setView(newName)
+                        .setPositiveButton(android.R.string.yes, null)
+                        .setNegativeButton(android.R.string.no, null);
+                final AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface xdialog) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+
+                        Button btn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final EditText editText = dialog.findViewById(R.id.new_team_name);
+                                if (editText != null) {
+                                    String newName = editText.getText().toString();
+                                    final int otherIDName = (name.getId() == R.id.name_team_a) ? R.id.name_team_b : R.id.name_team_a;
+                                    final TextView otherName = findViewById(otherIDName);
+                                    Boolean valid = true;
+                                    int message = 0;
+                                    if (newName.isEmpty()) {
+                                        valid = false;
+                                        message = R.string.empty_name;
+                                    }
+                                    else if (newName.equals(otherName.getText().toString())) {
+                                        valid = false;
+                                        message = R.string.equal_name;
+                                    }
+
+                                    if (valid) {
+                                        changeTeamName(team, newName);
+                                        dialog.dismiss();
+                                    }
+                                    else {
+                                        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                                        editText.setText(name.getText());
+                                        editText.setSelection(name.getText().length());
+                                        dialog.show();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                if (!isPlaying) {
+                    dialog.show();
                 }
             }
             catch (Exception e) {
@@ -207,6 +281,12 @@ public class MainActivity extends AppCompatActivity {
 
         final RadioButton radio5 = findViewById(R.id.radio_btn_5);
         radio5.setOnClickListener(mRadioButtonListener);
+
+        final TextView nameTeamA = findViewById(R.id.name_team_a);
+        nameTeamA.setOnClickListener(mTeamNameListener);
+
+        final TextView nameTeamB = findViewById(R.id.name_team_b);
+        nameTeamB.setOnClickListener(mTeamNameListener);
     }
 
     private void changeSets(int sets) {
@@ -224,6 +304,17 @@ public class MainActivity extends AppCompatActivity {
         radioPrev.setChecked(true);
         radio = findViewById(radioID);
         radio.setChecked(false);
+    }
+
+    private void changeTeamName(String current_team, String newName) {
+        Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
+        team.setName(newName);
+        final int idName = (current_team.equals(getString(R.string.default_name_team_a))) ? R.id.name_team_a : R.id.name_team_b;
+        final TextView nameTeam = findViewById(idName);
+        nameTeam.setText(newName);
+        final int idTName = (current_team.equals(getString(R.string.default_name_team_a))) ? R.id.tname_team_a : R.id.tname_team_b;
+        final TextView nameTTeam = findViewById(idTName);
+        nameTTeam.setText(newName);
     }
 
     private void configInitial(int sets) {

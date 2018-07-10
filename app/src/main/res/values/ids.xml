@@ -10,4 +10,5 @@
     <item name="set4_team_b" type="id"/>
     <item name="set5_team_a" type="id"/>
     <item name="set5_team_b" type="id"/>
+    <item name="new_team_name" type="id"/>
 </resources>
