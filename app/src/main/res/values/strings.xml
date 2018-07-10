@@ -13,5 +13,7 @@
     <string name="label_3">3</string>
     <string name="label_5">5</string>
     <string name="change_sets">Change Sets</string>
-    <string name="really_change_set">¿Are you sure that you want to change the number of sets?</string>
+    <string name="really_change_set">The game will going to reset ¿Are you sure that you want to change the number of sets?</string>
+    <string name="tag_team_name">team_name</string>
+    <string name="no_reset">Game doesn\'t start, nothing to reset</string>
 </resources>

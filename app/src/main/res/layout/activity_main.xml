@@ -113,8 +113,7 @@
                 android:padding="2dp"
                 android:text="@string/default_name_team_a"
                 android:textSize="20sp"
-                tools:layout_editor_absoluteX="206dp"
-                tools:layout_editor_absoluteY="245dp" />
+                android:tag="@string/tag_team_name" />
 
             <TextView
                 android:id="@+id/set1_team_a"
@@ -126,7 +125,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="@string/empty_score"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="" />
 
             <TextView
                 android:id="@+id/set2_team_a"
@@ -138,7 +138,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="@string/empty_score"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="" />
 
             <TextView
                 android:id="@+id/set3_team_a"
@@ -150,7 +151,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="@string/empty_score"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="" />
         </TableRow>
 
         <TableRow
@@ -167,7 +169,8 @@
                 android:background="@android:color/white"
                 android:padding="2dp"
                 android:text="@string/default_name_team_b"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="@string/tag_team_name" />
 
             <TextView
                 android:id="@+id/set1_team_b"
@@ -179,7 +182,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="@string/empty_score"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="" />
 
             <TextView
                 android:id="@+id/set2_team_b"
@@ -191,7 +195,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="@string/empty_score"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="" />
 
             <TextView
                 android:id="@+id/set3_team_b"
@@ -203,7 +208,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="@string/empty_score"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:tag="" />
         </TableRow>
 
     </TableLayout>

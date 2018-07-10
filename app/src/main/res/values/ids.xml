@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="set1_team_a" type="id"/>
+    <item name="set1_team_b" type="id"/>
+    <item name="set2_team_a" type="id"/>
+    <item name="set2_team_b" type="id"/>
+    <item name="set3_team_a" type="id"/>
+    <item name="set3_team_b" type="id"/>
+    <item name="set4_team_a" type="id"/>
+    <item name="set4_team_b" type="id"/>
+    <item name="set5_team_a" type="id"/>
+    <item name="set5_team_b" type="id"/>
+</resources>

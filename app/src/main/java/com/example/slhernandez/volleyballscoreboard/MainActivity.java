@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,8 +128,11 @@ public class MainActivity extends AppCompatActivity {
                         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
                     }
                 });
-                if (this.newLimitSets != limitSets) {
+                if (isPlaying && this.newLimitSets != limitSets) {
                     dialog.show();
+                }
+                else if (!isPlaying) {
+                    changeSets(newLimitSets);
                 }
             }
             catch (Exception e) {
@@ -184,7 +187,12 @@ public class MainActivity extends AppCompatActivity {
                             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
                         }
                     });
-                    dialog.show();
+                    if (isPlaying) {
+                        dialog.show();
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, R.string.no_reset, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -195,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
         final RadioButton radio3 = findViewById(R.id.radio_btn_3);
         radio3.setOnClickListener(mRadioButtonListener);
+        radio3.setChecked(true);
 
         final RadioButton radio5 = findViewById(R.id.radio_btn_5);
         radio5.setOnClickListener(mRadioButtonListener);
@@ -226,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
         this.currentSet = 0;
         this.isPlaying = false;
         configBoard();
+        configTable(sets);
         configScores(sets);
     }
 
@@ -240,24 +250,52 @@ public class MainActivity extends AppCompatActivity {
         setB.setText(this.teamB.getSetText());
     }
 
+    private void configTable(int sets) {
+        TableRow row;
+        TextView column;
+        int dp, child, pos;
+        final int[] id = new int[2];
+        id[0] = R.id.row_a;
+        id[1] = R.id.row_b;
+        String team;
+        for (int anId : id) {
+            row = findViewById(anId);
+            team = (anId == R.id.row_a) ? "a" : "b";
+            child = row.getChildCount();
+            for (int i = 0; i < child; i++) {
+                pos = row.getChildCount() - 1;
+                if (!row.getChildAt(pos).getTag().toString().equals(getString(R.string.tag_team_name))) {
+                    row.removeViewAt(pos);
+                }
+            }
+            for (int i = 1; i <= sets; i++) {
+                column = new TextView(getApplicationContext());
+                column.setId(getResources().getIdentifier("set" + i + "_team_" + team, "id", getPackageName()));
+                TableRow.LayoutParams params = new TableRow.LayoutParams();
+                params.weight = 1;
+                params.height = TableRow.LayoutParams.WRAP_CONTENT;
+                params.width = TableRow.LayoutParams.WRAP_CONTENT;
+                dp = Math.round(1 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
+                params.setMargins(dp, dp, dp, dp);
+                column.setLayoutParams(params);
+                column.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                dp = Math.round(2 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
+                column.setPadding(dp, dp, dp, dp);
+                column.setGravity(Gravity.CENTER_HORIZONTAL);
+                column.setText(R.string.empty_score);
+                column.setTextSize(20);
+                column.setTag("");
+                row.addView(column);
+            }
+        }
+    }
+
     private void configScores(int sets) {
         int id_a, id_b;
         String text_a, text_b;
         for (int set = 0; set < sets; set++) {
-            switch (set) {
-                case 1:
-                    id_a = R.id.set2_team_a;
-                    id_b = R.id.set2_team_b;
-                    break;
-                case 2:
-                    id_a = R.id.set3_team_a;
-                    id_b = R.id.set3_team_b;
-                    break;
-                default:
-                    id_a = R.id.set1_team_a;
-                    id_b = R.id.set1_team_b;
-                    break;
-            }
+            id_a = getResources().getIdentifier("set" + (set + 1) + "_team_a", "id", getPackageName());
+            id_b = getResources().getIdentifier("set" + (set + 1) + "_team_b", "id", getPackageName());
             if (this.currentSet < set + 1) {
                 text_a = getString(R.string.empty_score);
                 text_b = getString(R.string.empty_score);
