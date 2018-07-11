@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Volleyball Score Board</string>
+    <string name="app_name">Volleyball ScoreBoard</string>
     <string name="default_name_team_a">TEAM A</string>
     <string name="default_name_team_b">TEAM B</string>
     <string name="default_score">99</string>
