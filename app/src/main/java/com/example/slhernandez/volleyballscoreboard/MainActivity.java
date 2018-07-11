@@ -7,12 +7,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -150,17 +153,23 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             team = v.getTag().toString();
             try {
-                final EditText newName = new EditText(v.getContext());
                 final TextView name = findViewById(v.getId());
+                final LinearLayout layout = new LinearLayout(v.getContext());
+                final EditText newName = new EditText(v.getContext());
                 newName.setId(getResources().getIdentifier("new_team_name", "id", getPackageName()));
+                newName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
                 newName.setText(name.getText());
                 newName.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(10) });
                 newName.setSelection(newName.getText().length());
+                final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                params.setMargins(25, 50, 25, 50);
+                newName.setLayoutParams(params);
+                layout.addView(newName);
                 final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 builder.setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle(R.string.change_team_name)
                         //.setMessage(R.string.really_change_set)
-                        .setView(newName)
+                        .setView(layout)
                         .setPositiveButton(android.R.string.yes, null)
                         .setNegativeButton(android.R.string.no, null);
                 final AlertDialog dialog = builder.create();
