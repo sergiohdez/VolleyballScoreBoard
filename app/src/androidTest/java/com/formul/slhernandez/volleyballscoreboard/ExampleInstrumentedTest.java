@@ -1,4 +1,4 @@
-package com.example.slhernandez.volleyballscoreboard;
+package com.formul.slhernandez.volleyballscoreboard;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.slhernandez.volleyballscoreboard", appContext.getPackageName());
+        assertEquals("com.formul.slhernandez.volleyballscoreboard", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.slhernandez.volleyballscoreboard;
+package com.formul.slhernandez.volleyballscoreboard;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;

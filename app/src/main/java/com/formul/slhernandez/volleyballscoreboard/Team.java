@@ -1,4 +1,4 @@
-package com.example.slhernandez.volleyballscoreboard;
+package com.formul.slhernandez.volleyballscoreboard;
 
 import java.util.ArrayList;
 
