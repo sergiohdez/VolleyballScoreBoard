@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface xdialog) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
                     }
                 });
                 if (isPlaying && this.newLimitSets != limitSets) {
@@ -175,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface xdialog) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
 
                         Button btn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                         btn.setOnClickListener(new View.OnClickListener() {
@@ -265,8 +265,8 @@ public class MainActivity extends AppCompatActivity {
                     dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
                         public void onShow(DialogInterface xdialog) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#3f51b5"));
-                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#3f51b5"));
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
                         }
                     });
                     if (isPlaying) {
@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 dp = Math.round(1 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
                 params.setMargins(dp, dp, dp, dp);
                 column.setLayoutParams(params);
-                column.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                column.setBackgroundColor(Color.WHITE);
                 dp = Math.round(2 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
                 column.setPadding(dp, dp, dp, dp);
                 column.setGravity(Gravity.CENTER_HORIZONTAL);

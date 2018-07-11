@@ -19,4 +19,5 @@
     <string name="change_team_name">Change Team Name</string>
     <string name="empty_name">The name could not be empty</string>
     <string name="equal_name">The name is equal to the other team</string>
+    <string name="color_btn_dialog">#3f51b5</string>
 </resources>
