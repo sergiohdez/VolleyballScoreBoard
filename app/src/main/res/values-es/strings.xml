@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Volleyball ScoreBoard</string>
+    <string name="default_name_team_a">EQUIPO A</string>
+    <string name="default_name_team_b">EQUIPO B</string>
+    <string name="default_score">99</string>
+    <string name="default_set">9</string>
+    <string name="empty_score">--</string>
+    <string name="reset_title">Reiniciar Juego</string>
+    <string name="reset_label">Reiniciar</string>
+    <string name="really_reset">¿Está seguro que quiere reiniciar el juego?</string>
+    <string name="winner_message">El equipo ganador es</string>
+    <string name="sets_label">Sets</string>
+    <string name="label_3">3</string>
+    <string name="label_5">5</string>
+    <string name="change_sets">Cambiar Sets</string>
+    <string name="really_change_set">El juego se reiniciará ¿Está seguro de que quieres cambiar la cantidad de sets?</string>
+    <string name="tag_team_name">team_name</string>
+    <string name="no_reset">El juego no ha comenzado todavía, no hay nada que reiniciar</string>
+    <string name="change_team_name">Cambiar Nombre Equipo</string>
+    <string name="empty_name">El nombre no puede estar vacío</string>
+    <string name="equal_name">El nombre es igual al nombre del otro equipo</string>
+    <string name="color_btn_dialog">#3f51b5</string>
+</resources>

@@ -15,9 +15,9 @@
     <string name="change_sets">Change Sets</string>
     <string name="really_change_set">The game will going to reset ¿Are you sure that you want to change the number of sets?</string>
     <string name="tag_team_name">team_name</string>
-    <string name="no_reset">Game does not start, nothing to reset</string>
+    <string name="no_reset">Game has not start yet, nothing to reset</string>
     <string name="change_team_name">Change Team Name</string>
     <string name="empty_name">The name could not be empty</string>
-    <string name="equal_name">The name is equal to the other team</string>
+    <string name="equal_name">The name is equal to the other team name</string>
     <string name="color_btn_dialog">#3f51b5</string>
 </resources>

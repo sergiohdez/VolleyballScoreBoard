@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -333,20 +335,37 @@ public class MainActivity extends AppCompatActivity {
         this.lastTeam = "";
         this.currentSet = 0;
         this.isPlaying = false;
-        configBoard();
+        configBoard(false);
         configTable(sets);
         configScores(sets);
     }
 
-    private void configBoard() {
+    private void configBoard(Boolean underline) {
+        SpannableString content;
         final TextView scoreA = findViewById(R.id.score_team_a);
-        scoreA.setText(this.teamA.getScoreText());
-        final TextView setA = findViewById(R.id.set_team_a);
-        setA.setText(this.teamA.getSetText());
         final TextView scoreB = findViewById(R.id.score_team_b);
-        scoreB.setText(this.teamB.getScoreText());
+        final TextView setA = findViewById(R.id.set_team_a);
         final TextView setB = findViewById(R.id.set_team_b);
-        setB.setText(this.teamB.getSetText());
+        if (underline && !this.lastTeam.isEmpty()) {
+            if (this.lastTeam.equals(getString(R.string.default_name_team_a))) {
+                content = new SpannableString(this.teamA.getScoreText());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                scoreA.setText(content);
+                scoreB.setText(this.teamB.getScoreText());
+            }
+            if (this.lastTeam.equals(getString(R.string.default_name_team_b))) {
+                content = new SpannableString(this.teamB.getScoreText());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                scoreA.setText(this.teamA.getScoreText());
+                scoreB.setText(content);
+            }
+        }
+        else {
+            scoreA.setText(this.teamA.getScoreText());
+            setA.setText(this.teamA.getSetText());
+            scoreB.setText(this.teamB.getScoreText());
+            setB.setText(this.teamB.getSetText());
+        }
     }
 
     private void configTable(int sets) {
@@ -429,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isGameEnd() && !isSetEnd()) {
             team.setScore(team.getScore() + 1);
             this.lastTeam = current_team;
-            configBoard();
+            configBoard(true);
             if (!this.isPlaying) {
                 this.isPlaying = true;
             }
@@ -441,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
         if (team.getScore() > 0 && current_team.equals(this.lastTeam)) {
             team.setScore(team.getScore() - 1);
             this.lastTeam = "";
-            configBoard();
+            configBoard(false);
         }
     }
 
@@ -463,7 +482,7 @@ public class MainActivity extends AppCompatActivity {
             }
             this.lastTeam = current_team;
             this.currentSet += 1;
-            configBoard();
+            configBoard(false);
             configScores(this.limitSets);
         }
     }
@@ -478,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
             this.teamB.setScoresIndex(this.currentSet, 0);
             team.setSet(team.getSet() - 1);
             this.lastTeam = current_team;
-            configBoard();
+            configBoard(true);
             configScores(this.limitSets);
         }
     }
