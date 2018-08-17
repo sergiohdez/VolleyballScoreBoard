@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private String lastTeam;
     private int currentSet;
     private boolean isPlaying;
+    private boolean reversePoint;
+    private boolean reverseSet;
 
     private final View.OnTouchListener mScoreListener = new View.OnTouchListener() {
         private float y1;
@@ -335,6 +337,8 @@ public class MainActivity extends AppCompatActivity {
         this.lastTeam = "";
         this.currentSet = 0;
         this.isPlaying = false;
+        this.reversePoint = false;
+        this.reverseSet = false;
         configBoard(false);
         configTable(sets);
         configScores(sets);
@@ -362,10 +366,10 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             scoreA.setText(this.teamA.getScoreText());
-            setA.setText(this.teamA.getSetText());
             scoreB.setText(this.teamB.getScoreText());
-            setB.setText(this.teamB.getSetText());
         }
+        setA.setText(this.teamA.getSetText());
+        setB.setText(this.teamB.getSetText());
     }
 
     private void configTable(int sets) {
@@ -452,14 +456,19 @@ public class MainActivity extends AppCompatActivity {
             if (!this.isPlaying) {
                 this.isPlaying = true;
             }
+            this.reversePoint = false;
+        }
+        if (isSetEnd()) {
+            addSet(current_team);
         }
     }
 
     private void subtractPoint(String current_team) {
         Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
-        if (team.getScore() > 0 && current_team.equals(this.lastTeam)) {
+        if (team.getScore() > 0 && current_team.equals(this.lastTeam) && !reversePoint) {
             team.setScore(team.getScore() - 1);
             this.lastTeam = "";
+            this.reversePoint = true;
             configBoard(false);
         }
     }
@@ -476,12 +485,13 @@ public class MainActivity extends AppCompatActivity {
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.show();
             }
-            else {
+            //else {
                 this.teamA.setScore(0);
                 this.teamB.setScore(0);
-            }
+            //}
             this.lastTeam = current_team;
             this.currentSet += 1;
+            this.reverseSet = false;
             configBoard(false);
             configScores(this.limitSets);
         }
@@ -489,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void subtractSet(String current_team) {
         Team team = (current_team.equals(getString(R.string.default_name_team_a))) ? this.teamA : this.teamB;
-        if (team.getSet() > 0 && current_team.equals(this.lastTeam)) {
+        if (team.getSet() > 0 && current_team.equals(this.lastTeam) && !reverseSet) {
             this.currentSet -= 1;
             this.teamA.setScore(this.teamA.getScoresIndex(this.currentSet));
             this.teamB.setScore(this.teamB.getScoresIndex(this.currentSet));
@@ -497,6 +507,7 @@ public class MainActivity extends AppCompatActivity {
             this.teamB.setScoresIndex(this.currentSet, 0);
             team.setSet(team.getSet() - 1);
             this.lastTeam = current_team;
+            this.reverseSet = true;
             configBoard(true);
             configScores(this.limitSets);
         }
