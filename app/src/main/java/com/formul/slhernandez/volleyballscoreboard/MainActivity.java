@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -234,7 +235,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.limitSets = 3;
+        if (this.limitSets == 0) {
+            this.limitSets = 3;
+        }
         configInitial(this.limitSets);
 
         final TextView scoreA = findViewById(R.id.score_team_a);
@@ -342,6 +345,7 @@ public class MainActivity extends AppCompatActivity {
         configBoard(false);
         configTable(sets);
         configScores(sets);
+        configSets(sets);
     }
 
     private void configBoard(Boolean underline) {
@@ -433,6 +437,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void configSets(int sets) {
+        final RadioGroup radios = findViewById(R.id.radioGroup);
+        if (sets == 3) {
+            radios.check(R.id.radio_btn_3);
+        }
+        if (sets == 5) {
+            radios.check(R.id.radio_btn_5);
+        }
+    }
+
     private boolean isSetEnd() {
         int diffScores = Math.abs(this.teamA.getScore() - this.teamB.getScore());
         int sets = this.teamA.getSet() + this.teamB.getSet();
@@ -511,5 +525,17 @@ public class MainActivity extends AppCompatActivity {
             configBoard(true);
             configScores(this.limitSets);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("limit_sets", this.limitSets);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.limitSets = savedInstanceState.getInt("limit_sets");
     }
 }
