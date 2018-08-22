@@ -10,90 +10,90 @@
         android:id="@+id/name_team_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/default_name_team_a"
+        android:layout_marginLeft="@dimen/margin_left_default"
+        android:layout_marginStart="@dimen/margin_start_default"
+        android:layout_marginTop="@dimen/team_name_margin_top"
         android:tag="@string/default_name_team_a"
-        android:textSize="36sp"
+        android:text="@string/default_name_team_a"
+        android:textSize="@dimen/team_name_text_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
 
     <TextView
         android:id="@+id/name_team_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/default_name_team_b"
+        android:layout_marginEnd="@dimen/margin_end_default"
+        android:layout_marginRight="@dimen/margin_right_default"
+        android:layout_marginTop="@dimen/team_name_margin_top"
         android:tag="@string/default_name_team_b"
-        android:textSize="36sp"
+        android:text="@string/default_name_team_b"
+        android:textSize="@dimen/team_name_text_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
 
     <TextView
         android:id="@+id/score_team_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="@dimen/margin_left_default"
+        android:layout_marginStart="@dimen/margin_start_default"
+        android:layout_marginTop="@dimen/score_margin_top"
         android:tag="@string/default_name_team_a"
         android:text="@string/default_score"
-        android:textSize="124sp"
+        android:textSize="@dimen/score_text_size"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_team_a" />
+        app:layout_constraintTop_toTopOf="@+id/btn_reset" />
 
     <TextView
         android:id="@+id/score_team_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/margin_end_default"
+        android:layout_marginRight="@dimen/margin_right_default"
+        android:layout_marginTop="@dimen/score_margin_top"
         android:tag="@string/default_name_team_b"
         android:text="@string/default_score"
-        android:textSize="124sp"
+        android:textSize="@dimen/score_text_size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_team_b" />
+        app:layout_constraintTop_toTopOf="@+id/btn_reset" />
 
     <TextView
         android:id="@+id/set_team_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="220dp"
-        android:layout_marginStart="220dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginLeft="@dimen/margin_left_default"
+        android:layout_marginStart="@dimen/margin_start_default"
+        android:layout_marginTop="@dimen/set_margin_top"
         android:tag="@string/default_name_team_a"
         android:text="@string/default_set"
-        android:textSize="92sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="@dimen/set_text_size"
+        app:layout_constraintStart_toEndOf="@+id/score_team_a"
         app:layout_constraintTop_toTopOf="@+id/score_team_a" />
 
     <TextView
         android:id="@+id/set_team_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginRight="220dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginEnd="@dimen/margin_end_default"
+        android:layout_marginRight="@dimen/margin_right_default"
+        android:layout_marginTop="@dimen/set_margin_top"
         android:tag="@string/default_name_team_b"
         android:text="@string/default_set"
-        android:textSize="92sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="@dimen/set_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/score_team_b"
         app:layout_constraintTop_toTopOf="@+id/score_team_b" />
 
     <TableLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="@dimen/table_margin_bottom"
+        android:layout_marginEnd="@dimen/margin_end_default"
+        android:layout_marginLeft="@dimen/margin_left_default"
+        android:layout_marginRight="@dimen/margin_right_default"
+        android:layout_marginStart="@dimen/margin_start_default"
         android:background="@android:color/darker_gray"
         android:padding="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -113,9 +113,9 @@
                 android:layout_weight="2"
                 android:background="@android:color/white"
                 android:padding="2dp"
+                android:tag="@string/tag_team_name"
                 android:text="@string/default_name_team_a"
-                android:textSize="20sp"
-                android:tag="@string/tag_team_name" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/set1_team_a"
@@ -126,9 +126,9 @@
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:padding="2dp"
+                android:tag=""
                 android:text="@string/empty_score"
-                android:textSize="20sp"
-                android:tag="" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/set2_team_a"
@@ -139,9 +139,9 @@
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:padding="2dp"
+                android:tag=""
                 android:text="@string/empty_score"
-                android:textSize="20sp"
-                android:tag="" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/set3_team_a"
@@ -152,9 +152,9 @@
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:padding="2dp"
+                android:tag=""
                 android:text="@string/empty_score"
-                android:textSize="20sp"
-                android:tag="" />
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow
@@ -170,9 +170,9 @@
                 android:layout_weight="2"
                 android:background="@android:color/white"
                 android:padding="2dp"
+                android:tag="@string/tag_team_name"
                 android:text="@string/default_name_team_b"
-                android:textSize="20sp"
-                android:tag="@string/tag_team_name" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/set1_team_b"
@@ -183,9 +183,9 @@
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:padding="2dp"
+                android:tag=""
                 android:text="@string/empty_score"
-                android:textSize="20sp"
-                android:tag="" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/set2_team_b"
@@ -196,9 +196,9 @@
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:padding="2dp"
+                android:tag=""
                 android:text="@string/empty_score"
-                android:textSize="20sp"
-                android:tag="" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/set3_team_b"
@@ -209,9 +209,9 @@
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:padding="2dp"
+                android:tag=""
                 android:text="@string/empty_score"
-                android:textSize="20sp"
-                android:tag="" />
+                android:textSize="20sp" />
         </TableRow>
 
     </TableLayout>
@@ -220,32 +220,34 @@
         android:id="@+id/btn_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/margin_end_default"
+        android:layout_marginLeft="@dimen/margin_left_default"
+        android:layout_marginRight="@dimen/margin_right_default"
+        android:layout_marginStart="@dimen/margin_start_default"
+        android:layout_marginTop="@dimen/reset_margin_top"
         android:background="@color/colorPrimary"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp"
+        android:paddingBottom="@dimen/reset_padding_bottom"
+        android:paddingLeft="@dimen/reset_padding_left"
+        android:paddingRight="@dimen/reset_padding_right"
+        android:paddingTop="@dimen/reset_padding_top"
         android:text="@string/reset_label"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="@dimen/reset_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        android:paddingStart="@dimen/reset_padding_left"
+        android:paddingEnd="@dimen/reset_padding_right" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/margin_end_default"
+        android:layout_marginLeft="@dimen/margin_left_default"
+        android:layout_marginRight="@dimen/margin_right_default"
+        android:layout_marginStart="@dimen/margin_start_default"
+        android:layout_marginTop="@dimen/radio_group_margin_top"
         android:checkedButton="@+id/radio_btn_3"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -258,7 +260,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/sets_label"
-            android:textSize="18sp"
+            android:textSize="@dimen/sets_text_size"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="242dp"
             tools:layout_editor_absoluteY="72dp" />
@@ -270,7 +272,7 @@
             android:layout_weight="1"
             android:tag="3"
             android:text="@string/label_3"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sets_text_size" />
 
         <RadioButton
             android:id="@+id/radio_btn_5"
@@ -279,7 +281,7 @@
             android:layout_weight="1"
             android:tag="5"
             android:text="@string/label_5"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sets_text_size" />
     </RadioGroup>
 
 </android.support.constraint.ConstraintLayout>

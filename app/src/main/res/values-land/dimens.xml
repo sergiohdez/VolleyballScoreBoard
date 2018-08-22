@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_left_default">32sp</dimen>
+    <dimen name="margin_right_default">32sp</dimen>
+    <dimen name="margin_start_default">32sp</dimen>
+    <dimen name="margin_end_default">32sp</dimen>
+    <dimen name="team_name_margin_top">0dp</dimen>
+    <dimen name="score_margin_top">16dp</dimen>
+    <dimen name="sets_text_size">18sp</dimen>
+    <dimen name="reset_text_size">18sp</dimen>
+    <dimen name="reset_padding_left">8dp</dimen>
+    <dimen name="reset_padding_right">8dp</dimen>
+    <dimen name="reset_padding_top">4dp</dimen>
+    <dimen name="reset_padding_bottom">4dp</dimen>
+    <dimen name="team_name_text_size">36sp</dimen>
+    <dimen name="score_text_size">124sp</dimen>
+    <dimen name="set_text_size">92sp</dimen>
+    <dimen name="set_margin_top">32dp</dimen>
+    <dimen name="table_margin_bottom">8dp</dimen>
+    <dimen name="reset_margin_top">8dp</dimen>
+    <dimen name="radio_group_margin_top">8dp</dimen>
+</resources>
