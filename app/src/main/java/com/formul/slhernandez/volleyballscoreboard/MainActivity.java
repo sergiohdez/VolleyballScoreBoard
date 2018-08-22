@@ -413,26 +413,46 @@ public class MainActivity extends AppCompatActivity {
     private void configTable(int sets) {
         TableRow row;
         TextView column;
-        int dp, child, pos, density;
+        int dp, density;
         final int[] id = new int[2];
         id[0] = R.id.row_a;
         id[1] = R.id.row_b;
         String team;
         density = getApplicationContext().getResources().getDisplayMetrics().densityDpi;
+        TableRow.LayoutParams params;
         for (int anId : id) {
             row = findViewById(anId);
             team = (anId == R.id.row_a) ? "a" : "b";
-            child = row.getChildCount();
-            for (int i = 0; i < child; i++) {
-                pos = row.getChildCount() - 1;
-                if (!row.getChildAt(pos).getTag().toString().equals(getString(R.string.tag_team_name))) {
-                    row.removeViewAt(pos);
-                }
+            while (row.getChildCount() > 0) {
+                row.removeViewAt(0);
             }
+            column = new TextView(getApplicationContext());
+            column.setId(getResources().getIdentifier("tname_team_" + team, "id", getPackageName()));
+            params = new TableRow.LayoutParams();
+            params.weight = 1;
+            params.height = TableRow.LayoutParams.WRAP_CONTENT;
+            params.width = TableRow.LayoutParams.WRAP_CONTENT;
+            dp = getResources().getDimensionPixelSize(R.dimen.table_col_margin);
+            params.setMargins(dp, dp, dp, dp);
+            column.setLayoutParams(params);
+            column.setBackgroundColor(Color.WHITE);
+            dp = getResources().getDimensionPixelSize(R.dimen.table_col_padding);
+            column.setPadding(dp, dp, dp, dp);
+            //column.setGravity(Gravity.CENTER_HORIZONTAL);
+            if (anId == R.id.row_a) {
+                column.setText(this.teamA.getName());
+            }
+            else {
+                column.setText(this.teamB.getName());
+            }
+            dp = (160 * getResources().getDimensionPixelSize(R.dimen.table_text_size)) / density;
+            column.setTextSize(dp);
+            column.setTag(getString(R.string.tag_team_name));
+            row.addView(column);
             for (int i = 1; i <= sets; i++) {
                 column = new TextView(getApplicationContext());
                 column.setId(getResources().getIdentifier("set" + i + "_team_" + team, "id", getPackageName()));
-                TableRow.LayoutParams params = new TableRow.LayoutParams();
+                params = new TableRow.LayoutParams();
                 params.weight = 1;
                 params.height = TableRow.LayoutParams.WRAP_CONTENT;
                 params.width = TableRow.LayoutParams.WRAP_CONTENT;

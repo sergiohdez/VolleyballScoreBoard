@@ -6,7 +6,7 @@ android {
         applicationId "com.formul.slhernandez.volleyballscoreboard"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 6
+        versionCode 7
         versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
