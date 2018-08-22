@@ -19,4 +19,8 @@
     <dimen name="table_margin_bottom">8dp</dimen>
     <dimen name="reset_margin_top">8dp</dimen>
     <dimen name="radio_group_margin_top">8dp</dimen>
+    <dimen name="table_text_size">20sp</dimen>
+    <dimen name="table_col_margin">1dp</dimen>
+    <dimen name="table_col_padding">2dp</dimen>
+    <dimen name="table_padding">1dp</dimen>
 </resources>

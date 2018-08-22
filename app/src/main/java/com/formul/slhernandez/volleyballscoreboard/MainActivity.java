@@ -413,11 +413,12 @@ public class MainActivity extends AppCompatActivity {
     private void configTable(int sets) {
         TableRow row;
         TextView column;
-        int dp, child, pos;
+        int dp, child, pos, density;
         final int[] id = new int[2];
         id[0] = R.id.row_a;
         id[1] = R.id.row_b;
         String team;
+        density = getApplicationContext().getResources().getDisplayMetrics().densityDpi;
         for (int anId : id) {
             row = findViewById(anId);
             team = (anId == R.id.row_a) ? "a" : "b";
@@ -435,15 +436,16 @@ public class MainActivity extends AppCompatActivity {
                 params.weight = 1;
                 params.height = TableRow.LayoutParams.WRAP_CONTENT;
                 params.width = TableRow.LayoutParams.WRAP_CONTENT;
-                dp = Math.round(1 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
+                dp = getResources().getDimensionPixelSize(R.dimen.table_col_margin);
                 params.setMargins(dp, dp, dp, dp);
                 column.setLayoutParams(params);
                 column.setBackgroundColor(Color.WHITE);
-                dp = Math.round(2 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
+                dp = getResources().getDimensionPixelSize(R.dimen.table_col_padding);
                 column.setPadding(dp, dp, dp, dp);
                 column.setGravity(Gravity.CENTER_HORIZONTAL);
                 column.setText(R.string.empty_score);
-                column.setTextSize(20);
+                dp = (160 * getResources().getDimensionPixelSize(R.dimen.table_text_size)) / density;
+                column.setTextSize(dp);
                 column.setTag("");
                 row.addView(column);
             }
