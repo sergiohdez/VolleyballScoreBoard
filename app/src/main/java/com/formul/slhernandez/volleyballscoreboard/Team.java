@@ -51,6 +51,7 @@ public class Team {
     }
 
     public void setScores(Integer sets) {
+        this.scores.clear();
         for(int index = 0; index < sets; index++) {
             this.scores.add(0);
         }

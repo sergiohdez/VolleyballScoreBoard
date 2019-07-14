@@ -2,6 +2,7 @@ package com.formul.slhernandez.volleyballscoreboard;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +19,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.util.Locale;
 
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isPlaying;
     private boolean reversePoint;
     private boolean reverseSet;
+    private SharedPreferences mPrefs;
 
     private final View.OnTouchListener mScoreListener = new View.OnTouchListener() {
         private float y1;
@@ -112,31 +117,31 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             newLimitSets = Integer.parseInt(v.getTag().toString());
             try {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle(R.string.change_sets)
-                        .setMessage(R.string.really_change_set)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                changeSets(newLimitSets);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cancelChangeSets(newLimitSets);
-                            }
-                        });
-                final AlertDialog dialog = builder.create();
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface xdialog) {
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
-                    }
-                });
                 if (isPlaying && this.newLimitSets != limitSets) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(R.string.change_sets)
+                            .setMessage(R.string.really_change_set)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    changeSets(newLimitSets);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    cancelChangeSets(newLimitSets);
+                                }
+                            });
+                    final AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface xdialog) {
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                        }
+                    });
                     dialog.show();
                 }
                 else if (!isPlaying) {
@@ -204,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     if (valid) {
                                         changeTeamName(team, newName);
+                                        isPlaying = true;
                                         dialog.dismiss();
                                     }
                                     else {
@@ -217,9 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 });
-                if (!isPlaying) {
-                    dialog.show();
-                }
+                dialog.show();
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -234,8 +238,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.limitSets = 3;
-        configInitial(this.limitSets);
+        this.mPrefs = getSharedPreferences("VSB_Pref", 0);
+
+        configInitial(false);
 
         final TextView scoreA = findViewById(R.id.score_team_a);
         scoreA.setOnTouchListener(mScoreListener);
@@ -254,26 +259,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle(R.string.reset_title)
-                            .setMessage(R.string.really_reset)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    configInitial(limitSets);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null);
-                    final AlertDialog dialog = builder.create();
-                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface xdialog) {
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
-                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
-                        }
-                    });
                     if (isPlaying) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle(R.string.reset_title)
+                                .setMessage(R.string.really_reset)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        configInitial(true);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null);
+                        final AlertDialog dialog = builder.create();
+                        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface xdialog) {
+                                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor(getString(R.string.color_btn_dialog)));
+                            }
+                        });
                         dialog.show();
                     }
                     else {
@@ -289,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
         final RadioButton radio3 = findViewById(R.id.radio_btn_3);
         radio3.setOnClickListener(mRadioButtonListener);
-        radio3.setChecked(true);
+        //radio3.setChecked(true);
 
         final RadioButton radio5 = findViewById(R.id.radio_btn_5);
         radio5.setOnClickListener(mRadioButtonListener);
@@ -303,7 +308,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeSets(int sets) {
         this.limitSets = sets;
-        configInitial(sets);
+        this.teamA.setScores(sets);
+        this.teamB.setScores(sets);
+        this.teamA.setScore(0);
+        this.teamB.setScore(0);
+        this.teamA.setSet(0);
+        this.teamB.setSet(0);
+        this.lastTeam = "";
+        this.currentSet = 0;
+        this.isPlaying = true;
+        this.reversePoint = false;
+        this.reverseSet = false;
+        configBoard(false);
+        configTable(sets);
+        configScores(sets);
         Toast.makeText(this, "Sets: " + sets, Toast.LENGTH_SHORT).show();
     }
 
@@ -329,19 +347,39 @@ public class MainActivity extends AppCompatActivity {
         nameTTeam.setText(newName);
     }
 
-    private void configInitial(int sets) {
-        this.teamA = new Team(getString(R.string.default_name_team_a), 0, 0);
-        this.teamB = new Team(getString(R.string.default_name_team_b), 0, 0);
-        this.teamA.setScores(sets);
-        this.teamB.setScores(sets);
-        this.lastTeam = "";
-        this.currentSet = 0;
-        this.isPlaying = false;
-        this.reversePoint = false;
-        this.reverseSet = false;
-        configBoard(false);
-        configTable(sets);
-        configScores(sets);
+    private void configInitial(Boolean forceDefault) {
+        if (forceDefault) {
+            this.limitSets = 3;
+            this.teamA = new Team(getString(R.string.default_name_team_a), 0, 0);
+            this.teamB = new Team(getString(R.string.default_name_team_b), 0, 0);
+            this.lastTeam = "";
+            this.currentSet = 0;
+            this.isPlaying = false;
+            this.reversePoint = false;
+            this.reverseSet = false;
+        }
+        else {
+            Gson gson = new Gson();
+            this.limitSets = this.mPrefs.getInt("limit_sets", 3);
+            String defaultTeamA = "{\"name\":\"" + getString(R.string.default_name_team_a) + "\",\"score\":0,\"scores\":[0,0,0],\"set\":0}";
+            String defaultTeamB = "{\"name\":\"" + getString(R.string.default_name_team_b) + "\",\"score\":0,\"scores\":[0,0,0],\"set\":0}";
+            this.teamA = gson.fromJson(this.mPrefs.getString("team_a", defaultTeamA), Team.class);
+            this.teamB = gson.fromJson(this.mPrefs.getString("team_b", defaultTeamB), Team.class);
+            this.lastTeam = this.mPrefs.getString("last_team", "");
+            this.currentSet = this.mPrefs.getInt("current_set", 0);
+            this.isPlaying = this.mPrefs.getBoolean("is_playing", false);
+            this.reversePoint = this.mPrefs.getBoolean("reverse_point", false);
+            this.reverseSet = this.mPrefs.getBoolean("reverse_set", false);
+        }
+
+        this.teamA.setScores(this.limitSets);
+        this.teamB.setScores(this.limitSets);
+        configBoard(this.isPlaying);
+        configTable(this.limitSets);
+        configScores(this.limitSets);
+        configSets(this.limitSets);
+        changeTeamName(getString(R.string.default_name_team_a), this.teamA.getName());
+        changeTeamName(getString(R.string.default_name_team_b), this.teamB.getName());
     }
 
     private void configBoard(Boolean underline) {
@@ -375,37 +413,59 @@ public class MainActivity extends AppCompatActivity {
     private void configTable(int sets) {
         TableRow row;
         TextView column;
-        int dp, child, pos;
+        int dp, density;
         final int[] id = new int[2];
         id[0] = R.id.row_a;
         id[1] = R.id.row_b;
         String team;
+        density = getApplicationContext().getResources().getDisplayMetrics().densityDpi;
+        TableRow.LayoutParams params;
         for (int anId : id) {
             row = findViewById(anId);
             team = (anId == R.id.row_a) ? "a" : "b";
-            child = row.getChildCount();
-            for (int i = 0; i < child; i++) {
-                pos = row.getChildCount() - 1;
-                if (!row.getChildAt(pos).getTag().toString().equals(getString(R.string.tag_team_name))) {
-                    row.removeViewAt(pos);
-                }
+            while (row.getChildCount() > 0) {
+                row.removeViewAt(0);
             }
+            column = new TextView(getApplicationContext());
+            column.setId(getResources().getIdentifier("tname_team_" + team, "id", getPackageName()));
+            params = new TableRow.LayoutParams();
+            params.weight = 1;
+            params.height = TableRow.LayoutParams.WRAP_CONTENT;
+            params.width = TableRow.LayoutParams.WRAP_CONTENT;
+            dp = getResources().getDimensionPixelSize(R.dimen.table_col_margin);
+            params.setMargins(dp, dp, dp, dp);
+            column.setLayoutParams(params);
+            column.setBackgroundColor(Color.WHITE);
+            dp = getResources().getDimensionPixelSize(R.dimen.table_col_padding);
+            column.setPadding(dp, dp, dp, dp);
+            //column.setGravity(Gravity.CENTER_HORIZONTAL);
+            if (anId == R.id.row_a) {
+                column.setText(this.teamA.getName());
+            }
+            else {
+                column.setText(this.teamB.getName());
+            }
+            dp = (160 * getResources().getDimensionPixelSize(R.dimen.table_text_size)) / density;
+            column.setTextSize(dp);
+            column.setTag(getString(R.string.tag_team_name));
+            row.addView(column);
             for (int i = 1; i <= sets; i++) {
                 column = new TextView(getApplicationContext());
                 column.setId(getResources().getIdentifier("set" + i + "_team_" + team, "id", getPackageName()));
-                TableRow.LayoutParams params = new TableRow.LayoutParams();
+                params = new TableRow.LayoutParams();
                 params.weight = 1;
                 params.height = TableRow.LayoutParams.WRAP_CONTENT;
                 params.width = TableRow.LayoutParams.WRAP_CONTENT;
-                dp = Math.round(1 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
+                dp = getResources().getDimensionPixelSize(R.dimen.table_col_margin);
                 params.setMargins(dp, dp, dp, dp);
                 column.setLayoutParams(params);
                 column.setBackgroundColor(Color.WHITE);
-                dp = Math.round(2 * (getApplicationContext().getResources().getDisplayMetrics().densityDpi / 160f));
+                dp = getResources().getDimensionPixelSize(R.dimen.table_col_padding);
                 column.setPadding(dp, dp, dp, dp);
                 column.setGravity(Gravity.CENTER_HORIZONTAL);
                 column.setText(R.string.empty_score);
-                column.setTextSize(20);
+                dp = (160 * getResources().getDimensionPixelSize(R.dimen.table_text_size)) / density;
+                column.setTextSize(dp);
                 column.setTag("");
                 row.addView(column);
             }
@@ -430,6 +490,16 @@ public class MainActivity extends AppCompatActivity {
             scoreA.setText(text_a);
             final TextView scoreB = findViewById(id_b);
             scoreB.setText(text_b);
+        }
+    }
+
+    private void configSets(int sets) {
+        final RadioGroup radios = findViewById(R.id.radioGroup);
+        if (sets == 3) {
+            radios.check(R.id.radio_btn_3);
+        }
+        if (sets == 5) {
+            radios.check(R.id.radio_btn_5);
         }
     }
 
@@ -511,5 +581,33 @@ public class MainActivity extends AppCompatActivity {
             configBoard(true);
             configScores(this.limitSets);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor ed = this.mPrefs.edit();
+        ed.putInt("limit_sets", this.limitSets);
+        ed.putString("last_team", this.lastTeam);
+        ed.putInt("current_set", this.currentSet);
+        ed.putBoolean("is_playing", this.isPlaying);
+        ed.putBoolean("reverse_point", this.reversePoint);
+        ed.putBoolean("reverse_set", this.reverseSet);
+        Gson gson = new Gson();
+        String jsonTeamA = gson.toJson(this.teamA);
+        String jsonTeamB = gson.toJson(this.teamB);
+        ed.putString("team_a", jsonTeamA);
+        ed.putString("team_b", jsonTeamB);
+        ed.apply();
     }
 }
