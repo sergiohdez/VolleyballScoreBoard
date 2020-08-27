@@ -4,8 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -24,9 +23,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private Team teamA;
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final View.OnClickListener mRadioButtonListener = new View.OnClickListener() {
         private int newLimitSets;
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void onClick(View v) {
             newLimitSets = Integer.parseInt(v.getTag().toString());
@@ -150,13 +155,14 @@ public class MainActivity extends AppCompatActivity {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                Log.e("Exception in Dialog:", e.getMessage());
+                Log.e("Exception in Dialog:", Objects.requireNonNull(e.getMessage()));
             }
         }
     };
 
     private final View.OnClickListener mTeamNameListener = new View.OnClickListener() {
         private String team;
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         public void onClick(View v) {
             team = v.getTag().toString();
@@ -196,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                                     String newName = editText.getText().toString();
                                     final int otherIDName = (name.getId() == R.id.name_team_a) ? R.id.name_team_b : R.id.name_team_a;
                                     final TextView otherName = findViewById(otherIDName);
-                                    Boolean valid = true;
+                                    boolean valid = true;
                                     int message = 0;
                                     if (newName.isEmpty()) {
                                         valid = false;
@@ -227,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                Log.e("Exception in Dialog:", e.getMessage());
+                Log.e("Exception in Dialog:", Objects.requireNonNull(e.getMessage()));
             }
         }
     };
@@ -256,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button btnReset = findViewById(R.id.btn_reset);
         btnReset.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 try {
@@ -287,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("Exception in Dialog:", e.getMessage());
+                    Log.e("Exception in Dialog:", Objects.requireNonNull(e.getMessage()));
                 }
             }
         });
